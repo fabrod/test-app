@@ -1,15 +1,25 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from "react-router-dom";
+import useFetch from "./useFetch";
 
-function BlogDetails() {
-    const {id} = useParams()
-    return (
-        <div>
-            <h2>Blog Details Page!!!- {id}</h2>
-        </div>
-    )
+const BlogDetails = () => {
+  const { id } = useParams();
+  const { data: blog, error, isPending } = useFetch('http://localhost:8000/blogs/' + id);
+
+  return (
+    <div className="blog-details">
+      { isPending && <div>Loading...</div> }
+      { error && <div>{ error }</div> }
+      { blog && (
+        <article>
+          <h2>{ blog.title }</h2>
+          <p>Written by { blog.author }</p>
+          <div>{ blog.body }</div>
+        </article>
+      )}
+    </div>
+  );
 }
-
-export default BlogDetails
+ 
+export default BlogDetails;
 
 
